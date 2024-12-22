@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package queue;
+
+option go_package = "grpc-for-DQS/queue;queue";
+
+service QueueService {
+  // Добавление задачи в очередь
+  rpc PushTask (PushTaskRequest) returns (PushTaskResponse);
+
+  // Получение задачи из очереди
+  rpc PopTask (PopTaskRequest) returns (PopTaskResponse);
+
+  // Подтверждение выполнения задачи
+  rpc AcknowledgeTask (AcknowledgeTaskRequest) returns (AcknowledgeTaskResponse);
+
+  // Получение состояния очереди
+  rpc GetQueueStats (GetQueueStatsRequest) returns (GetQueueStatsResponse);
+}
+
+// Сообщения для работы с задачами
+message PushTaskRequest {
+  string queue_name = 1; // Имя очереди
+  string task_id = 2;    // Идентификатор задачи
+  string task_payload = 3; // Данные задачи (в формате JSON)
+  int32 priority = 4;    // Приоритет задачи
+}
+
+message PushTaskResponse {
+  bool success = 1;  // Успешно ли добавлена задача
+}
+
+message PopTaskRequest {
+  string queue_name = 1; // Имя очереди
+}
+
+message PopTaskResponse {
+  string task_id = 1;    // Идентификатор задачи
+  string task_payload = 2; // Данные задачи
+}
+
+message AcknowledgeTaskRequest {
+  string queue_name = 1; // Имя очереди
+  string task_id = 2;    // Идентификатор задачи
+}
+
+message AcknowledgeTaskResponse {
+  bool success = 1;  // Успешно ли подтверждена задача
+}
+
+message GetQueueStatsRequest {
+  string queue_name = 1; // Имя очереди
+}
+
+message GetQueueStatsResponse {
+  int32 task_count = 1;  // Количество задач в очереди
+  int32 processing_tasks = 2; // Количество задач в обработке
+}
