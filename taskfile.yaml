@@ -1,0 +1,7 @@
+version: "3"
+
+tasks:
+  build:
+    desc: "generate protobuf"
+    cmds:
+      - protoc --go_out=. --go-grpc_out=. queue.proto                                                                                                                                                  [22:52:29]
